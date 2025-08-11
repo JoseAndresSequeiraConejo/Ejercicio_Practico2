@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:th="http://www.thymeleaf.org"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+    <head th:fragment="head">
+        <title>Caso2 - cambiar por su correo de la u</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+        <!-- Bootstrap y FontAwesome -->
+        <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" rel="stylesheet"/>
+        <link th:href="@{/webjars/font-awesome/css/all.css}" rel="stylesheet"/>
+
+        <!-- Tu CSS personalizado -->
+        <link th:href="@{/css/estilos.css}" rel="stylesheet"/>
+
+        <!-- JS -->
+        <script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    </head>
+
+
+    <body>
+        <header th:fragment="header" class="header">
+            <nav class="navbar navbar-expand-md navbar-dark sticky-top py-2">
+                <div class="container container-tight">
+                    <a th:href="@{/}" class="navbar-brand d-flex align-items-center gap-2">
+                        <i class="fas fa-cubes"></i>
+                        <span>Caso2</span>
+                    </a>
+
+                    <button class="navbar-toggler" type="button"
+                            data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+
+                    <div class="collapse navbar-collapse" id="navbarCollapse">
+                        <ul class="navbar-nav me-auto mb-2 mb-md-0">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/carro/listado}" th:text="#{plantilla.carros}">Carros</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/suexamen/listado}" th:text="#{plantilla.suexamen}">Su Examen</a>
+                            </li>
+                        </ul>
+
+                        <!-- Área derecha (login) -->
+                        <ul sec:authorize="isAnonymous()" class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <form method="post" th:action="@{/login}" class="d-inline">
+                                    <a href="#" onclick="this.closest('form').submit();" class="nav-link btn btn-ghost px-3 py-1 rounded">
+                                        <i class="fas fa-user-clock me-1"></i> [[#{login.login}]]
+                                    </a>
+                                </form>
+                            </li>
+                        </ul>
+
+                        <!-- Usuario autenticado -->
+                        <ul sec:authorize="isAuthenticated()" class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <span class="nav-link disabled">
+                                    <i class="fas fa-user-check me-1"></i> [[${#authentication.name}]]
+                                </span>
+                            </li>
+                            <li class="nav-item">
+                                <form method="post" th:action="@{/logout}">
+                                    <button class="btn btn-ghost ms-2">
+                                        <i class="fas fa-sign-out-alt me-1"></i> [[#{login.logout}]]
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+
+            <section id="main-header" class="py-4 text-white">
+                <div class="container container-tight">
+                    <div class="row align-items-center">
+                        <div class="col-lg-8">
+                            <h1 class="h2 mb-1">
+                                <i class="fas fa-cog me-2"></i> [[#{plantilla.titulo}]]
+                            </h1>
+                            <p class="mb-0 text-white-50">[[#{plantilla.subtitulo(#{plantilla.titulo})}]]</p>
+                        </div>
+                        <div class="col-lg-4 text-lg-end pt-3 pt-lg-0">
+                            <a th:href="@{/carro/listado}" class="btn btn-ghost me-2">
+                                <i class="fas fa-car-side me-1"></i> [[#{plantilla.carros}]]
+                            </a>
+                            <a th:href="@{/suexamen/listado}" class="btn btn-light text-dark">
+                                <i class="fas fa-file-alt me-1"></i> [[#{plantilla.suexamen}]]
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </header>
+
+        <!-- Contenido de la página aquí -->
+        <main class="container container-tight my-4">
+            <div class="alert alert-dark border-0" role="alert" th:if="${flashMsg}">
+                <i class="fas fa-info-circle me-1"></i> [[${flashMsg}]]
+            </div>
+            <div th:insert="~{::content}"></div>
+        </main>
+
+        <footer th:fragment="footer" class="text-white mt-5 py-3">
+            <div class="container container-tight">
+                <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
+                    <p class="lead m-0">
+                        &copy; [[#{plantilla.derechos}]]
+                    </p>
+                    <p class="m-0 lang">
+                        <a th:href="@{/(lang=es)}">ES</a>
+                        <a th:href="@{/(lang=en)}">EN</a>
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+    </body>
+</html>
