@@ -35,7 +35,7 @@ public class Carro implements Serializable {
         this.descripcion = descripcion;
         this.cilindros = cilindros;
         this.activo = activo;
-        this.modelo = ""+(new Date());
+        this.modelo = modelo;
     }
     
         

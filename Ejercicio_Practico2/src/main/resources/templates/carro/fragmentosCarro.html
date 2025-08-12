@@ -1,18 +1,19 @@
 <!DOCTYPE HTML>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://wwww.thymeleaf.org" 
-      xmlns:sec="http://thymeleaft.org/extras/spring-security">
+      xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:replace="~{layout/plantilla :: head}">
-        <title>Examen 2</title>
+        <title>Carro</title>
     </head>
     <body>
+        <!-- Botón agregar -->
         <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3" sec:authorize="hasRole('ROLE_ADMIN')">   
+                    <div class="col-md-3" sec:authorize="hasRole('ADMIN')">   
                         <button 
                             type="button" 
-                            class="btn btn-primary btn-block" 
+                            class="btn btn-primary w-100" 
                             data-bs-toggle="modal" 
                             data-bs-target="#agregarCarro">
                             <i class="fas fa-plus"></i> [[#{accion.agregar}]]
@@ -22,7 +23,7 @@
             </div>
         </section>
 
-
+        <!-- Modal agregar carro -->
         <section th:fragment="agregarCarro">
             <div id="agregarCarro" class="modal fade" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -31,26 +32,57 @@
                             <h5 class="modal-title" th:text="#{accion.agregar}">Agregar Carro</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div> 
-                        <form th:action="@{/carro/guardar}" th:object="${carro}"
-                              method="POST" class="was-validated">
+
+                        <form th:action="@{/carro/guardar}" th:object="${carro}" method="POST" class="was-validated">
+
+                            <!-- Campo oculto para el id (autoincremental) -->
+                            <input type="hidden" th:field="*{idCarro}"/>
+
                             <div class="modal-body">
-                                <div class="form-group">
-                                    <label for="idCarro" th:text="#{carro.idCarro}">Id</label>
-                                    <input type="number" class="form-control" name="idCarro" required="true"/>
+
+                                <!-- Categoría -->
+                                <div class="form-group mb-3">
+                                    <label for="categoria">Categoría</label>
+                                    <select class="form-select" th:field="*{categoria.idCategoria}" required>
+                                        <option value="" disabled selected>-- Seleccione --</option>
+                                        <option th:each="c : ${categorias}" 
+                                                th:value="${c.idCategoria}" 
+                                                th:text="${c.descripcion}"></option>
+                                    </select>
                                 </div>
-                                <div class="form-group">
-                                    <label for="descripcion" th:text="#{carro.descripcion}">descripcion</label>
-                                    <input type="text" class="form-control" name="descripcion" required="true"/>
+
+                                <!-- Descripción -->
+                                <div class="form-group mb-3">
+                                    <label for="descripcion" th:text="#{carro.descripcion}">Descripción</label>
+                                    <input type="text" class="form-control" th:field="*{descripcion}" required/>
                                 </div>
-                                <div class="form-group">
+
+                                <!-- Cilindros -->
+                                <div class="form-group mb-3">
                                     <label for="cilindros" th:text="#{carro.cilindros}">Cilindros</label>
-                                    <input type="number" class="form-control" name="cilindros" required="true"/>
+                                    <input type="number" class="form-control" th:field="*{cilindros}" min="1" required/>
                                 </div>
-                                <div class="form-group">
+
+                                <!-- Modelo (texto, no fecha) -->
+                                <div class="form-group mb-3">
                                     <label for="modelo" th:text="#{carro.modelo}">Modelo</label>
-                                    <input type="date" class="form-control" name="modelo"/>
-                                </div>                                
+                                    <input type="text" class="form-control" th:field="*{modelo}" placeholder="Ej: Nissan Sentra"/>
+                                </div>
+
+                                <!-- Activo -->
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" th:field="*{activo}" id="activo"/>
+                                    <label class="form-check-label" for="activo" th:text="#{carro.activo}">Activo</label>
+                                </div>
+
+                                <!-- Precio -->
+                                <div class="form-group mb-3">
+                                    <label for="precio" th:text="#{carro.precio}">Precio</label>
+                                    <input type="number" step="0.01" min="0" class="form-control" th:field="*{precio}" required/>
+                                </div>
+
                             </div>
+
                             <div class="modal-footer">
                                 <button class="btn btn-primary" type="submit" th:text="#{accion.guardar}">Guardar</button>
                             </div>
@@ -58,8 +90,12 @@
                     </div>
                 </div>
             </div>
-        </section>        
+        </section>
 
+
+
+
+        <!-- Listado de carros -->
         <section th:fragment="listadoCarros" id="carros">
             <div class="container">
                 <div class="row">
@@ -69,7 +105,7 @@
                                 <h4>[[#{carro.titulo}]]</h4>
                             </div>
                             <div th:if="${carros != null and !carros.empty}">
-                                <table class="table table-stryped">
+                                <table class="table table-striped">
                                     <thead class="thead-dark">
                                         <tr>
                                             <th th:text="#{carro.idCarro}">Id</th>
@@ -87,13 +123,13 @@
                                             <td>[[${carro.cilindros}]]</td>
                                             <td>[[${carro.modelo}]]</td>
                                             <td>
-                                                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/carro/eliminar/}+${carro.idCarro}"
+                                                <a sec:authorize="hasRole('ADMIN')" th:href="@{/carro/eliminar/}+${carro.idCarro}"
                                                    class="btn btn-danger">
                                                     <i class="fas fa-trash-can"></i> [[#{accion.eliminar}]]
                                                 </a>
                                             </td>
                                             <td>
-                                                <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/carro/modificar/}+${carro.idCarro}"
+                                                <a sec:authorize="hasRole('ADMIN')" th:href="@{/carro/modificar/}+${carro.idCarro}"
                                                    class="btn btn-success">
                                                     <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]
                                                 </a>
@@ -117,11 +153,11 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </section>
 
+        <!-- Formulario editar carro -->
         <section th:fragment="editarCarro">            
             <form method="POST"
                   th:action="@{/carro/guardar}"
@@ -130,8 +166,10 @@
                 <input type="hidden" name="idCarro" th:field="*{idCarro}"/> 
                 <section th:replace="~{carro/fragmentosCarro :: botonesEditar}"/> 
                 <div id="details"> 
-                    <div class="container"><div class="row">
-                            <div class="col"><div class="card">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <div class="card">
                                     <div class="card-header">
                                         <h4>[[#{accion.actualizar}]]</h4>
                                     </div>
@@ -157,23 +195,24 @@
             </form>
         </section>
 
+        <!-- Botones editar -->
         <section th:fragment="botonesEditar">
             <div id="actions" class="py-4 mb-4 bg-light">
                 <div class="container">
                     <div class="row">
                         <div class="d-grid col-md-2 mx-auto">
-                            <a th:href="@{/carro/listado}" class="btn btn-ligth btn-block">
+                            <a th:href="@{/carro/listado}" class="btn btn-light w-100">
                                 <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
                             </a>
                         </div>
                         <div class="d-grid col-md-2 mx-auto">
-                            <button type="submit" class="btn btn-success btn-block">
+                            <button type="submit" class="btn btn-success w-100">
                                 <i class="fas fa-check"></i> [[#{accion.guardar}]]
                             </button>
                         </div>
                         <div class="d-grid col-md-2 mx-auto">
                             <a th:href="@{/carro/eliminar/}+${carro.idCarro}"
-                               class="btn btn-danger btn-block">
+                               class="btn btn-danger w-100">
                                 <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                             </a>
                         </div>

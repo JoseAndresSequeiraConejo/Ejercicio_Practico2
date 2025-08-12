@@ -25,15 +25,17 @@ public class CarroController {
     
     @GetMapping("/listado")
     public String listado(Model model) {
-        var carros = carroService.getCarros(false); // false = no filtra por activos
+        var carros = carroService.getCarros(false); // o getCarros()
         model.addAttribute("carros", carros);
         model.addAttribute("totalCarros", carros.size());
 
-        var categorias = categoriaService.getCategorias(false);
-        model.addAttribute("categorias", categorias);
+        // 🔴 Necesarios para el modal / fragmento
+        model.addAttribute("carro", new Carro());
+        model.addAttribute("categorias", categoriaService.getCategorias(true));
 
-        return "/carro/listado";
+        return "carro/listado"; // SIN "/"
     }
+
 
     @GetMapping("/nuevo")
     public String carroNuevo(Carro carro, Model model) {
@@ -43,10 +45,23 @@ public class CarroController {
     }
 
     @PostMapping("/guardar")
-    public String carroGuardar(Carro carro) {
+    public String carroGuardar(Carro carro, Model model) {
+        if (carro.getCategoria() == null || carro.getCategoria().getIdCategoria() == null) {
+            model.addAttribute("carro", carro);
+            model.addAttribute("categorias", categoriaService.getCategorias(true));
+            model.addAttribute("error", "Debe seleccionar una categoría.");
+            return "carro/modifica";
+        }
+
+        // Opción rápida: setear solo el id (sin ir a BD)
+        var cat = new com.caso2.domain.Categoria();
+        cat.setIdCategoria(carro.getCategoria().getIdCategoria());
+        carro.setCategoria(cat);
+
         carroService.save(carro);
         return "redirect:/carro/listado";
     }
+
 
     @GetMapping("/eliminar/{idCarro}")
     public String carroEliminar(Carro carro) {

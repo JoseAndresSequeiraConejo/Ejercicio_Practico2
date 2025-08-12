@@ -41,6 +41,15 @@ public class Configuracion implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registro) {
         registro.addInterceptor(localeChanceInterceptor());
     }
+    
+    //Bean para poder acceder a los Messages.properties en código...
+    @Bean("messageSource")
+    public MessageSource messageSource() {
+        ResourceBundleMessageSource messageSource= new ResourceBundleMessageSource();
+        messageSource.setBasenames("messages");
+        messageSource.setDefaultEncoding("UTF-8");
+        return messageSource;
+    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registro) {
@@ -101,6 +110,7 @@ public class Configuracion implements WebMvcConfigurer {
 
         return http.build();
     }
+
 
 
     
