@@ -1,50 +1,118 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://wwww.thymeleaf.org" 
-      xmlns:sec="http://thymeleaft.org/extras/spring-security">
+      xmlns:th="http://wwww.thymeleaf.org">
+
     <head th:replace="~{layout/plantilla :: head}">
-        <title>TechShop</title>
+        <title>CarShop</title>
+        <meta charset="UTF-8"/>
+        <!-- Bootstrap CSS -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" 
+              rel="stylesheet">
+        <!-- Font Awesome -->
+        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" 
+              rel="stylesheet">
     </head>
+
     <body>
-        <header th:replace="~{layout/plantilla :: header}"></header>
-        <section id="actions" class="py-4 mb-4 bg-light">
-            <div class="container">
-                <div class="row">                   
-                </div>
-            </div>
-        </section>
-        <section id="login">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-6 mx-auto">
-                        <div class="card">
-                            <div class="card-header">
-                                <h4>[[#{login.login}]]</h4>
-                            </div>
-                            <div class="card-body">
-                                <form method="POST" th:action="@{/login}">
-                                    <div class="row py-1 mb-2 bg-light"> 
-                                        <div class="form-group">
-                                            <label for="username">[[#{login.username}]]:</label>
-                                            <input type="text" name="username" id="username"/>
-                                        </div>
-                                    </div>
-                                    <div class="row py-1 mb-2 bg-light">
-                                        <div class="form-group">
-                                            <label for="password">[[#{login.password}]]:</label>
-                                            <input type="password" name="password" id="password"/>
-                                        </div>
-                                    </div>
-                                    <div class="row  py-1 mb-2 bg-light">
-                                        <button type="submit" class="btn btn-primary btn-block">[[#{login.login}]]</button>                                        
-                                    </div>
-                                </form>
+        <!-- Header -->
+        <header th:replace="~{layout/plantilla :: header}"/>
+        
+        <!-- Main Container -->
+        <div class="container my-5">
+            <div class="row justify-content-center"> 
+                <div class="col-md-6 col-lg-5">
+                    
+                    <!-- Login Card -->
+                    <div class="card shadow">
+                        
+                        <!-- Card Header -->
+                        <div class="card-header bg-success text-white">
+                            <h2 class="mb-0 text-center">
+                                [[#{login.login}]]
+                            </h2>
+                        </div>
+                        
+                        <!-- Card Body -->
+                        <div class="card-body">
+                            <form method="POST" th:action="@{/login}">
+                                
+                                <!-- Username Field -->
+                                <div class="mb-3">
+                                    <label class="form-label" for="username">
+                                        <i class="fas fa-user-lock me-2"></i>
+                                        [[#{login.username}]]:
+                                    </label>
+                                    <input class="form-control" 
+                                           type="text" 
+                                           name="username" 
+                                           id="username" 
+                                           required/>
+                                </div>
+                                
+                                <!-- Password Field -->
+                                <div class="mb-3">
+                                    <label class="form-label" for="password">
+                                        <i class="fas fa-key me-2"></i>
+                                        [[#{login.password}]]:
+                                    </label>
+                                    <input class="form-control" 
+                                           type="password" 
+                                           name="password" 
+                                           id="password" 
+                                           required/>
+                                </div>
+                                
+                                <!-- Login Button -->
+                                <div class="d-grid gap-2">
+                                    <button class="btn btn-success" type="submit">
+                                        <i class="fas fa-sign-in-alt me-2"></i>
+                                        [[#{login.login}]]
+                                    </button>
+                                </div>
+                                
+                            </form>
+                        </div>
+                        
+                        <!-- Card Footer - Additional Actions -->
+                        <div class="card-footer bg-light">
+                            <div class="d-grid gap-2">
+                                
+                                <!-- Register Button -->
+                                <a th:href="@{/registro/nuevo}" 
+                                   class="btn btn-primary">
+                                    <i class="fas fa-user-plus me-2"></i>
+                                    [[#{accion.registrar}]]
+                                </a>
+                                
+                                <!-- Forgot Password Button -->
+                                <a th:href="@{/registro/recordar}" 
+                                   class="btn btn-info">
+                                    <i class="fas fa-envelope me-2"></i>
+                                    [[#{accion.recordar}]]
+                                </a>
+                                
                             </div>
                         </div>
+                        
                     </div>
+                    
+                    <!-- Error Message -->
+                    <div th:if="${param.error != null}" 
+                         class="alert alert-danger mt-3" 
+                         role="alert">
+                        <i class="fas fa-exclamation-triangle me-2"></i>
+                        <strong>[[#{error.login}]]</strong>
+                    </div>
+                    
                 </div>
-            </div>
-        </section>
-        <footer th:replace="~{layout/plantilla :: footer}"></footer>
+            </div>           
+        </div>
+        
+        <!-- Footer -->
+        <footer th:replace="~{layout/plantilla :: footer}"/>
+        
+        <!-- Bootstrap JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+        
     </body>
 </html>

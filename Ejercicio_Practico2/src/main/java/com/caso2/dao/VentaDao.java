@@ -9,6 +9,9 @@ package com.caso2.dao;
  *
  * @author Jose Sequeira
  */
-public class VentaDao {
+import com.caso2.domain.Venta;
+import org.springframework.data.jpa.repository.JpaRepository;
 
+public interface VentaDao extends JpaRepository <Venta,Long> {
+     
 }

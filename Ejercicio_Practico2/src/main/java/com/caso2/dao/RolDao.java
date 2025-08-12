@@ -9,6 +9,9 @@ package com.caso2.dao;
  *
  * @author Jose Sequeira
  */
-public class RolDao {
+import com.caso2.domain.Rol;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface RolDao extends JpaRepository<Rol, Long> {
 
 }

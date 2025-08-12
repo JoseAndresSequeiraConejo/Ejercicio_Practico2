@@ -29,7 +29,7 @@
                 <div class="container container-tight">
                     <a th:href="@{/}" class="navbar-brand d-flex align-items-center gap-2">
                         <i class="fas fa-cubes"></i>
-                        <span>Caso2</span>
+                        <span>CarShop</span>
                     </a>
 
                     <button class="navbar-toggler" type="button"
@@ -41,10 +41,10 @@
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="navbar-nav me-auto mb-2 mb-md-0">
                             <li class="nav-item">
-                                <a class="nav-link" th:href="@{/carro/listado}" th:text="#{plantilla.carros}">Carros</a>
+                                <a class="nav-link" th:href="@{carro/listado}" th:text="#{plantilla.carros}">Carros</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" th:href="@{/suexamen/listado}" th:text="#{plantilla.suexamen}">Su Examen</a>
+                                <a class="nav-link" th:href="@{usuarios/listado}" th:text="#{plantilla.Usuarios}">Usuarios</a>
                             </li>
                         </ul>
 
@@ -92,7 +92,7 @@
                                 <i class="fas fa-car-side me-1"></i> [[#{plantilla.carros}]]
                             </a>
                             <a th:href="@{/suexamen/listado}" class="btn btn-light text-dark">
-                                <i class="fas fa-file-alt me-1"></i> [[#{plantilla.suexamen}]]
+                                <i class="fas fa-file-alt me-1"></i> [[#{plantilla.usuarios}]]
                             </a>
                         </div>
                     </div>

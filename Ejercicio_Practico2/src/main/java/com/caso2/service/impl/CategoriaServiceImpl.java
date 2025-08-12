@@ -9,9 +9,9 @@ package com.caso2.service.impl;
  *
  * @author Jose Sequeira
  */
-import com.tienda.dao.CategoriaDao;
-import com.tienda.domain.Categoria;
-import com.tienda.service.CategoriaService;
+import com.caso2.dao.CategoriaDao;
+import com.caso2.domain.Categoria;
+import com.caso2.service.CategoriaService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

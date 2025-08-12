@@ -53,22 +53,57 @@ public class Configuracion implements WebMvcConfigurer {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
+                // Público
                 .requestMatchers(
                     "/", "/index",
-                    "/carro/**",
-                    "/suExamen/**",
+                    "/registro/**",
+                    "/carrito/**",
                     "/webjars/**",
-                    "/css/**", "/js/**", "/images/**", "/fonts/**"   // <- agrega esto
+                    "/css/**", "/js/**", "/images/**", "/fonts/**"
                 ).permitAll()
-                .requestMatchers("/gerentes/**").hasRole("ADMIN")
+
+                // Público (si de verdad quieres exponer carro a todos)
+                .requestMatchers("/carro/**").permitAll()
+
+                // ADMIN
+                .requestMatchers(
+                    "/producto/nuevo","/producto/guardar",
+                    "/producto/modificar/**","/producto/eliminar/**",
+                    "/categoria/nuevo","/categoria/guardar",
+                    "/categoria/modificar/**","/categoria/eliminar/**",
+                    "/usuario/nuevo","/usuario/guardar",
+                    "/usuario/modificar/**","/usuario/eliminar/**",
+                    "/reportes/**",
+                    "/gerentes/**"
+                ).hasRole("ADMIN")
+
+                // ADMIN o VENDEDOR
                 .requestMatchers("/historico/**").hasAnyRole("ADMIN","VENDEDOR")
+
+                // Listados visibles para varios roles
+                .requestMatchers(
+                    "/producto/listado",
+                    "/categoria/listado",
+                    "/usuario/listado"
+                ).hasAnyRole("ADMIN","VENDEDOR","USER")
+
+                // Solo USER
+                .requestMatchers("/facturar/carrito").hasRole("USER")
+
+                // Cualquier otra cosa autenticada
                 .anyRequest().authenticated()
             )
-            .formLogin(form -> form.loginPage("/login").permitAll())
+            .formLogin(form -> form
+                .loginPage("/login")
+                .permitAll()
+            )
             .logout(logout -> logout.permitAll());
+
         return http.build();
     }
 
+
+    
     
     @Autowired
     private UserDetailsService userDetailsService;

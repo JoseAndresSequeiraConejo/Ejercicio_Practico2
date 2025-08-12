@@ -1,55 +1,64 @@
 package com.caso2.service;
 
+import com.caso2.dao.CarroDao;
 import com.caso2.domain.Carro;
+import com.caso2.service.CarroService;
 import java.util.List;
 import java.util.Objects;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CarroServiceImpl implements CarroService {
 
-    public CarroServiceImpl() {
-        listaCarros.add(new Carro(1, "Toyota Tercel", 4));
-        listaCarros.add(new Carro(2, "Lexus", 8));
-    }
+    @Autowired
+    private CarroDao carroDao;
 
     @Override
-    public void save(Carro carro) {
-        var indice = -1;
-        for (var a : listaCarros) {
-            indice++;
-            if (Objects.equals(a.getIdCarro(), carro.getIdCarro())) {
-                listaCarros.remove(indice);
-                break;
-            }
+    @Transactional(readOnly = true)
+    public List<Carro> getCarros(boolean activos) {
+        var lista = carroDao.findAll();
+        if (activos) {
+            lista.removeIf(e -> !e.isActivo());
         }
-        listaCarros.add(carro);
+        return lista;
     }
 
     @Override
-    public void delete(Carro carro) {
-        int indice = -1;
-        for (var a : listaCarros) {
-            indice++;
-            if (Objects.equals(a.getIdCarro(), carro.getIdCarro())) {
-                listaCarros.remove(indice);
-                break;
-            }
-        }
-    }
-
-    @Override
+    @Transactional(readOnly = true)
     public Carro getCarro(Carro carro) {
-        for (var a : listaCarros) {
-            if (Objects.equals(a.getIdCarro(), carro.getIdCarro())) {
-                return a;
-            }
-        }
-        return null;
+        return carroDao.findById(carro.getIdCarro()).orElse(null);
+    }
+    
+    @Override
+    @Transactional
+    public void save(Carro carro) {
+        carroDao.save(carro);
     }
 
     @Override
-    public List<Carro> getCarros() {
-        return listaCarros;
+    @Transactional
+    public void delete(Carro carro) {
+        carroDao.delete(carro);
+    }
+
+    // Lista de producto con precio entre ordenados por descripcion ConsultaAmpliada
+    @Override
+    @Transactional(readOnly=true)
+    public List<Carro> findByPrecioBetweenOrderByDescripcion(double precioInf, double precioSup){
+        return carroDao.findByPrecioBetweenOrderByDescripcion(precioInf,precioSup);
+    }
+    
+    @Override
+    @Transactional(readOnly=true)
+    public List<Carro> metodoJPQL(double precioInf, double precioSup) {
+        return carroDao.metodoJPQL(precioInf, precioSup);
+    }
+
+    @Override
+    @Transactional(readOnly=true)
+    public List<Carro> metodoNativo(double precioInf, double precioSup) {
+        return carroDao.metodoNativo(precioInf, precioSup);
     }
 }

@@ -10,7 +10,7 @@ package com.caso2.service;
  * @author Jose Sequeira
  */
 
-import com.tienda.domain.Categoria;
+import com.caso2.domain.Categoria;
 import java.util.List;
 
 public interface CategoriaService {

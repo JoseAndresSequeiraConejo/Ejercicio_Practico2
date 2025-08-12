@@ -9,9 +9,8 @@ package com.caso2.controller;
  *
  * @author Jose Sequeira
  */
-import com.tienda.domain.Categoria;
-import com.tienda.service.CategoriaService;
-import com.tienda.service.impl.FirebaseStorageServiceImpl;
+import com.caso2.domain.Categoria;
+import com.caso2.service.CategoriaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -40,17 +39,9 @@ public class CategoriaController {
     public String categoriaNuevo(Categoria categoria) {
         return "/categoria/modifica";
     }
-
-    @Autowired
-    private FirebaseStorageServiceImpl firebaseStorageService;
     
     @PostMapping("/guardar")
-    public String categoriaGuardar(Categoria categoria,
-            @RequestParam("imagenFile") MultipartFile imagenFile) {        
-        if (!imagenFile.isEmpty()) {
-            categoriaService.save(categoria);
-            categoria.setRutaImagen(firebaseStorageService.cargarImagen(imagenFile, "categoria",categoria.getIdCategoria()));
-        }
+    public String categoriaGuardar(Categoria categoria) {        
         categoriaService.save(categoria);
         return "redirect:/categoria/listado";
     }

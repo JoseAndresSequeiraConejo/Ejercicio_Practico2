@@ -9,6 +9,9 @@ package com.caso2.dao;
  *
  * @author Jose Sequeira
  */
-public class FacturaDao {
+import com.caso2.domain.Factura;
+import org.springframework.data.jpa.repository.JpaRepository;
 
+public interface FacturaDao extends JpaRepository <Factura,Long> {
+     
 }

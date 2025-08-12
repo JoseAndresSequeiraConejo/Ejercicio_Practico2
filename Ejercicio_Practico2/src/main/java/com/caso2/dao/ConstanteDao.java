@@ -9,6 +9,12 @@ package com.caso2.dao;
  *
  * @author Jose Sequeira
  */
-public class ConstanteDao {
+import com.caso2.domain.Constante;
+import org.springframework.data.jpa.repository.JpaRepository;
 
+public interface ConstanteDao 
+        extends JpaRepository<Constante,Long> {
+    
+    public Constante findByAtributo(String stributo);
 }
+
