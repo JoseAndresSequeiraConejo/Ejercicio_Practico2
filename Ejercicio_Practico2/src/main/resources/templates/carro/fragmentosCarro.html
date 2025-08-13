@@ -6,6 +6,40 @@
         <title>Carro</title>
     </head>
     <body>
+
+        <!-- Fragmento: Carrito mostrando Carros dinámicos -->
+        <section th:fragment="carrito" class="mb-4">
+            <div class="row row-cols-1 row-cols-md-3 g-3">
+                <div th:each="c : ${carros}" class="col">
+                    <div class="card h-100">
+                        <img src="/images/noimage.jpg" class="card-img-top" alt="Imagen carro" height="200" style="object-fit:cover;">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${c.descripcion}">Descripción del carro</h5>
+                                <ul class="list-unstyled mb-3">
+                                    <li><strong>ID:</strong> <span th:text="${c.idCarro}"></span></li>
+                                    <li><strong>Cilindros:</strong> <span th:text="${c.cilindros}"></span></li>
+                                    <li><strong>Modelo:</strong> <span th:text="${c.modelo}"></span></li>
+                                    <li><strong>Precio:</strong> $<span th:text="${c.precio}"></span></li>
+                                    <li>
+                                        <strong>Categoría:</strong>
+                                        <span th:text="${c.categoria != null ? c.categoria.descripcion : '—'}"></span>
+                                    </li>
+                                </ul>
+                                <form>
+                                    <input type="hidden" name="idCarro" th:value="${c.idCarro}"/>
+                                    <button class="btn btn-light" type="button" onclick="addCard(this.form)">
+                                        <i class="fas fa-cart-plus"></i> Agregar
+                                    </button>
+                                </form>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+
+
         <!-- Botón agregar -->
         <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
             <div class="container">
@@ -97,7 +131,7 @@
 
         <!-- Listado de carros -->
         <section th:fragment="listadoCarros" id="carros">
-            <div class="container">
+            <div class="container"sec:authorize="hasRole('ADMIN')">
                 <div class="row">
                     <div class="col-md-9">
                         <div class="card">

@@ -126,40 +126,47 @@ public class ItemServiceImpl implements ItemService {
     public void facturar() {
         // 1) Usuario autenticado
         String username = "";
-        var principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof UserDetails ud) username = ud.getUsername();
-        else if (principal != null) username = principal.toString();
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null) {
+            var principal = auth.getPrincipal();
+            if (principal instanceof UserDetails ud) {
+                username = ud.getUsername();
+            } else if (principal != null) {
+                username = principal.toString();
+            }
+        }
         if (username.isBlank()) return;
 
         Usuario usuario = usuarioDao.findByUsername(username);
         if (usuario == null) return;
 
-        // 2) Crear la factura y mantener la variable en el scope del método
+        // 2) Crear la factura
         Factura factura = facturaDao.save(new Factura(usuario.getIdUsuario()));
 
-        // 3) Procesar ítems del carrito
+        // 3) Ítems del carrito
         @SuppressWarnings("unchecked")
         List<Item> lista = (List<Item>) session.getAttribute("listaItems");
         if (lista == null || lista.isEmpty()) return;
 
         double total = 0.0;
+
         for (Item i : lista) {
-            // (Opcional) validar que el carro existe
+            // validar existencia del carro (opcional)
             carroDao.getReferenceById(i.getIdCarro());
 
-            // Registrar la venta (ajusta el constructor de Venta si difiere)
+            // Registrar la venta SIN cantidad
             Venta venta = new Venta(
-                factura.getIdFactura(), // <-- ahora sí existe
+                factura.getIdFactura(),
                 i.getIdCarro(),
-                i.getPrecio(),
-                1 // cada auto es único
+                i.getPrecio()
             );
             ventaDao.save(venta);
 
+            // cada carro se cobra una vez
             total += i.getPrecio();
         }
 
-        // 4) Actualizar total y guardar la factura
+        // 4) Actualizar total
         factura.setTotal(total);
         facturaDao.save(factura);
 
@@ -168,7 +175,6 @@ public class ItemServiceImpl implements ItemService {
         session.setAttribute("listaItems", lista);
     }
 
-
     @Override
     public double getTotal() {
         @SuppressWarnings("unchecked")
@@ -176,13 +182,14 @@ public class ItemServiceImpl implements ItemService {
         if (listaItems == null || listaItems.isEmpty()) {
             return 0.0;
         }
-
         double total = 0.0;
         for (Item i : listaItems) {
-            total += i.getCantidad() * i.getPrecio();
+            // sin cantidades: solo el precio de cada carro
+            total += i.getPrecio();
         }
         return total;
     }
+
 
 
 }
