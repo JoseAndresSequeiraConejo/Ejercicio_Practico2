@@ -3,6 +3,8 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
     <head th:replace="~{layout/plantilla :: head}">
+        <link rel="stylesheet" href="../../static/css/estilos.css" type="text/css"/>
+
         <title>Cine</title>
     </head>
     <body>
@@ -36,31 +38,40 @@
                             <h5 class="modal-title">[[#{teatro.agregar}]]</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div> 
+
                         <form th:action="@{/teatro/guardar}" th:object="${teatro}"
-                              method="POST" class="was-validated" enctype="multipart/form-data">
+                              method="POST" class="was-validated">
                             <div class="modal-body">
+
+                                <!-- Nombre -->
                                 <div class="mb-3">
-                                    <label for="descripcion">[[#{teatro.descripcion}]]</label>
-                                    <input type="text" class="form-control" name="descripcion" required="true"/>
+                                    <label for="nombre" class="form-label">[[#{teatro.nombre}]]</label>
+                                    <input type="text" class="form-control" id="nombre" th:field="*{nombre}" required />
                                 </div>
+
+                                <!-- Ubicación -->
                                 <div class="mb-3">
-                                    <label for="activo">[[#{teatro.activo}]]</label>
-                                    <input class="form-check-input" type="checkbox" name="activo" id="activo"/>
+                                    <label for="ubicacion" class="form-label">[[#{teatro.ubicacion}]]</label>
+                                    <input type="text" class="form-control" id="ubicacion" th:field="*{ubicacion}" required />
                                 </div>
-                                <div class="mb-3">
-                                    <label for="imagen">[[#{teatro.rutaImagen}]]</label>
-                                    <input class="form-control" type="file" name="imagenFile" onchange="readURL(this);"/>
-                                    <img id="blah" src="#" alt="your image" height="200"/>
+
+                                <!-- Activo -->
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="checkbox" id="activo" th:field="*{activo}" />
+                                    <label class="form-check-label" for="activo">[[#{teatro.activo}]]</label>
                                 </div>
+
                             </div>
                             <div class="modal-footer">
-                                <button class="btn btn-primary" type="submit">Guardar</button>
+                                <button class="btn btn-primary" type="submit">[[#{accion.guardar}]]</button>
                             </div>
                         </form>
+
                     </div>
                 </div>
             </div>
         </section>
+
 
         <!-- 3 Listado de teatros -->
         <section th:fragment="listadoTeatros" id="teatros">
