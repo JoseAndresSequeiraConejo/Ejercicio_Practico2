@@ -47,7 +47,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" th:href="@{/teatro/listado}" th:text="#{plantilla.teatros}">Teatros</a>
                             </li>
-                            <li class="nav-item">
+
+                            <!-- SOLO visible para ADMIN -->
+                            <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                                 <a class="nav-link" th:href="@{/usuario/listado}" th:text="#{plantilla.Usuarios}">Usuarios</a>
                             </li>
 
@@ -55,6 +57,7 @@
                                 <a class="nav-link" th:href="@{/contact}">Contacto</a>
                             </li>
                         </ul>
+
 
                         <!-- Área derecha (login) -->
                         <ul sec:authorize="isAnonymous()" class="navbar-nav ms-auto">
