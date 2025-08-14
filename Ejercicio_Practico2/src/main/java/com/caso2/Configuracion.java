@@ -76,10 +76,10 @@ public class Configuracion implements WebMvcConfigurer {
 
                 // ADMIN
                 .requestMatchers(
-                    "/producto/nuevo","/producto/guardar",
-                    "/producto/modificar/**","/producto/eliminar/**",
-                    "/categoria/nuevo","/categoria/guardar",
-                    "/categoria/modificar/**","/categoria/eliminar/**",
+                    "/funcion/nuevo","/funcion/guardar",
+                    "/funcion/modificar/**","/funcion/eliminar/**",
+                    "/teatro/nuevo","/teatro/guardar",
+                    "/teatro/modificar/**","/teatro/eliminar/**",
                     "/usuario/nuevo","/usuario/guardar",
                     "/usuario/modificar/**","/usuario/eliminar/**",
                     "/reportes/**",
@@ -91,8 +91,8 @@ public class Configuracion implements WebMvcConfigurer {
 
                 // Listados visibles para varios roles
                 .requestMatchers(
-                    "/producto/listado",
-                    "/categoria/listado",
+                    "/funcion/listado",
+                    "/teatro/listado",
                     "/usuario/listado"
                 ).hasAnyRole("ADMIN","VENDEDOR","USER")
 

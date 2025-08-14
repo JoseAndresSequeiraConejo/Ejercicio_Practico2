@@ -15,20 +15,18 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(callSuper=false)
-public class Item extends Carro {
+public class Item extends Funcion {
     private int cantidad; //Almacenar la cantidad de items de un producto
 
     public Item() {
     }
 
-    public Item(Carro carro) {
-        super.setIdCarro(carro.getIdCarro());
-        super.setDescripcion(carro.getDescripcion());
-        super.setCilindros(carro.getCilindros());
-        super.setModelo(carro.getModelo());
-        super.setCategoria(carro.getCategoria());
-        super.setPrecio(carro.getPrecio());
-        super.setActivo(carro.isActivo());
+    public Item(Funcion funcion) {
+        super.setIdFuncion(funcion.getIdFuncion());
+        super.setNombre(funcion.getNombre());
+        super.setDescripcion(funcion.getDescripcion());
+        super.setPrecio(funcion.getPrecio());
+        super.setTipo(funcion.getTipo());
         this.cantidad = 0;
     }
 }

@@ -10,11 +10,11 @@ package com.caso2.service.impl;
  * @author Jose Sequeira
  */
 
-import com.caso2.dao.CarroDao;
+import com.caso2.dao.FuncionDao;
 import com.caso2.dao.FacturaDao;
 import com.caso2.dao.UsuarioDao;
 import com.caso2.dao.VentaDao;
-import com.caso2.domain.Carro;
+import com.caso2.domain.Funcion;
 import com.caso2.domain.Factura;
 import com.caso2.domain.Item;
 import com.caso2.domain.Usuario;
@@ -48,7 +48,7 @@ public class ItemServiceImpl implements ItemService {
         List<Item> listaItems = (List<Item>) session.getAttribute("listaItems");
         if (listaItems != null) {
             for (Item i : listaItems) {
-                if (Objects.equals(i.getIdCarro(), item.getIdCarro())) {
+                if (Objects.equals(i.getIdFuncion(), item.getIdFuncion())) {
                     return i;
                 }
             }
@@ -65,7 +65,7 @@ public class ItemServiceImpl implements ItemService {
             boolean existe = false;
             for (Item i : listaItems) {
                 pos++;
-                if (Objects.equals(i.getIdCarro(), item.getIdCarro())) {
+                if (Objects.equals(i.getIdFuncion(), item.getIdFuncion())) {
                     existe = true;
                     break;
                 }
@@ -85,7 +85,7 @@ public class ItemServiceImpl implements ItemService {
 
         boolean existe = false;
         for (Item i : listaItems) {
-            if (Objects.equals(i.getIdCarro(), item.getIdCarro())) {
+            if (Objects.equals(i.getIdFuncion(), item.getIdFuncion())) {
                 existe = true;
                 // Si manejas existencias, descomenta la validación:
                 // if (i.getCantidad() < i.getExistencias()) {
@@ -108,7 +108,7 @@ public class ItemServiceImpl implements ItemService {
         List<Item> listaItems = (List<Item>) session.getAttribute("listaItems");
         if (listaItems != null) {
             for (Item i : listaItems) {
-                if (Objects.equals(i.getIdCarro(), item.getIdCarro())) {
+                if (Objects.equals(i.getIdFuncion(), item.getIdFuncion())) {
                     i.setCantidad(item.getCantidad());
                     session.setAttribute("listaItems", listaItems);
                     break;
@@ -118,7 +118,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Autowired private UsuarioDao usuarioDao;
-    @Autowired private CarroDao carroDao;
+    @Autowired private FuncionDao funcionDao;
     @Autowired private FacturaDao facturaDao;
     @Autowired private VentaDao ventaDao;
 
@@ -152,12 +152,12 @@ public class ItemServiceImpl implements ItemService {
 
         for (Item i : lista) {
             // validar existencia del carro (opcional)
-            carroDao.getReferenceById(i.getIdCarro());
+            funcionDao.getReferenceById(i.getIdFuncion());
 
             // Registrar la venta SIN cantidad
             Venta venta = new Venta(
                 factura.getIdFactura(),
-                i.getIdCarro(),
+                i.getIdFuncion(),
                 i.getPrecio()
             );
             ventaDao.save(venta);

@@ -5,7 +5,7 @@
     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
     <head th:fragment="head">
-        <title>Caso2 - cambiar por su correo de la u</title>
+        <title>Caso2</title>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
@@ -42,10 +42,17 @@
                     <div class="collapse navbar-collapse" id="navbarCollapse">
                         <ul class="navbar-nav me-auto mb-2 mb-md-0">
                             <li class="nav-item">
-                                <a class="nav-link" th:href="@{/carro/listado}" th:text="#{plantilla.carros}">Carros</a>
+                                <a class="nav-link" th:href="@{/funcion/listado}" th:text="#{plantilla.funciones}">Funciones</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/teatros/listado}" th:text="#{plantilla.teatros}">Teatros</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" th:href="@{/usuario/listado}" th:text="#{plantilla.Usuarios}">Usuarios</a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/contact}">Contacto</a>
                             </li>
                         </ul>
 
@@ -92,8 +99,8 @@
                             <p class="mb-0 text-white-50">[[#{plantilla.subtitulo(#{plantilla.titulo})}]]</p>
                         </div>
                         <div class="col-lg-4 text-lg-end pt-3 pt-lg-0">
-                            <a th:href="@{/carro/listado}" class="btn btn-ghost me-2">
-                                <i class="fas fa-car-side me-1"></i> [[#{plantilla.carros}]]
+                            <a th:href="@{/funcion/listado}" class="btn btn-ghost me-2">
+                                <i class="fas fa-car-side me-1"></i> [[#{plantilla.funciones}]]
                             </a>
                             <a th:href="@{/usuario/listado}" class="btn btn-light text-dark">
                                 <i class="fas fa-file-alt me-1"></i> [[#{plantilla.usuarios}]]

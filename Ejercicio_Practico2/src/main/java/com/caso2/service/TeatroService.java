@@ -10,22 +10,22 @@ package com.caso2.service;
  * @author Jose Sequeira
  */
 
-import com.caso2.domain.Categoria;
+import com.caso2.domain.Teatro;
 import java.util.List;
 
-public interface CategoriaService {
+public interface TeatroService {
 
-    public List<Categoria> getCategorias(boolean activo);
+    public List<Teatro> getTeatros(boolean activo);
 
     // Se obtiene un Categoria, a partir del id de un categoria
-    public Categoria getCategoria(Categoria categoria);
+    public Teatro getTeatro(Teatro teatro);
     
     // Se inserta un nuevo categoria si el id del categoria esta vacío
     // Se actualiza un categoria si el id del categoria NO esta vacío
-    public void save(Categoria categoria);
+    public void save(Teatro teatro);
     
     // Se elimina el categoria que tiene el id pasado por parámetro
-    public void delete(Categoria categoria);
+    public void delete(Teatro teatro);
 }
  
  

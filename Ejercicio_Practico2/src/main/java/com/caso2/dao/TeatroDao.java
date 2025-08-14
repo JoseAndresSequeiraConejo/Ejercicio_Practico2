@@ -9,8 +9,8 @@ package com.caso2.dao;
  *
  * @author Jose Sequeira
  */
-import com.caso2.domain.Categoria;
+import com.caso2.domain.Teatro;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CategoriaDao extends JpaRepository<Categoria, Long> {
+public interface TeatroDao extends JpaRepository<Teatro, Long> {
 }

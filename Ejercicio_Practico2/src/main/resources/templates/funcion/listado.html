@@ -3,14 +3,16 @@
       xmlns:th="http://wwww.thymeleaf.org" 
       xmlns:sec="http://thymeleaft.org/extras/spring-security">
     <head th:replace="~{layout/plantilla :: head}">
-        <title>TechShop</title>
+        <title>Funcion</title>
     </head>
     <body>
         <header th:replace="~{layout/plantilla :: header}" />        
-        <section th:replace="~{carro/fragmentosCarro :: carrito}"/>
-        <section th:replace="~{carro/fragmentosCarro :: botonesAgregar}"/>
-        <section th:replace="~{carro/fragmentosCarro :: agregarCarro}"/> 
-        <section th:replace="~{carro/fragmentosCarro :: listadoCarros}"/>
+        <section th:replace="~{funcion/fragmentos :: funciones}"/>
+        <section th:replace="~{funcion/fragmentos :: botonesAgregar}"/>
+        <section th:replace="~{funcion/fragmentos :: agregarFuncion}"/> 
+        <section th:replace="~{funcion/fragmentos :: listadoFunciones}"/>
+
+        
 
         <footer th:replace="~{layout/plantilla :: footer}" />     
     </body>

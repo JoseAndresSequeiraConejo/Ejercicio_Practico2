@@ -25,7 +25,7 @@ public class CarritoController {
    private ItemService itemService;
 
    @Autowired
-   private CarroService carroService;
+   private FuncionService funcionService;
 
    //Para ver el carrito
    @GetMapping("/carrito/listado")
@@ -44,8 +44,8 @@ public class CarritoController {
    public ModelAndView agregarItem(Model model, Item item) {
        Item item2 = itemService.get(item);
        if (item2 == null) {
-           Carro carro = carroService.getCarro(item);
-           item2 = new Item(carro);
+           Funcion funcion = funcionService.getFuncion(item);
+           item2 = new Item(funcion);
        }
        itemService.save(item2);
        var lista = itemService.gets();
