@@ -7,8 +7,8 @@
     </head>
     <body>
 
-        <!-- LISTADO DE CARROS (tarjetas) -->
-        <section th:fragment="listadoCarros" id="carros">
+        <!-- LISTADO DE FUNCIONES (tarjetas) -->
+        <section th:fragment="listadoFunciones" id="funciones">
             <div class="container">
                 <div class="row align-items-center mb-3">
                     <div class="col">
@@ -18,19 +18,19 @@
                 </div>
 
                 <div class="row row-cols-1 row-cols-md-3 g-3"
-                     th:if="${carros != null and !carros.empty}">
-                    <div class="col" th:each="carro : ${carros}">
+                     th:if="${funciones != null && !funciones.empty}">
+                    <div class="col" th:each="funcion : ${funciones}">
                         <div class="card h-100 shadow-sm">
-                            <img th:src="@{/images/noimage.jpg}" class="card-img-top" alt="Imagen carro" height="200" style="object-fit:cover"/>
+                            <img th:src="@{/images/noimage.jpg}" class="card-img-top" alt="Imagen función" height="200" style="object-fit:cover"/>
                             <div class="card-body d-flex flex-column">
-                                <h5 class="card-title mb-1" th:text="${carro.modelo}">Modelo</h5>
-                                <p class="text-muted small mb-2" th:text="${carro.descripcion}">Descripción</p>
+                                <h5 class="card-title mb-1" th:text="${funcion.nombre}">Nombre</h5>
+                                <p class="text-muted small mb-2" th:text="${funcion.descripcion}">Descripción</p>
 
                                 <div class="d-flex justify-content-between align-items-center mt-auto">
-                                    <span class="fw-bold" th:text="${#numbers.formatInteger(carro.precio, 0, 'POINT')}">0</span>
+                                    <span class="fw-bold" th:text="${#numbers.formatInteger(funcion.precio, 0, 'POINT')}">0</span>
 
                                     <!-- Botón agregar al carrito -->
-                                    <form th:action="@{/carrito/agregar/{idCarro}(idCarro=${carro.idCarro})}" method="get" class="m-0">
+                                    <form th:action="@{/carrito/agregar/{idFuncion}(idFuncion=${funcion.idFuncion})}" method="get" class="m-0">
                                         <button class="btn btn-outline-primary" type="submit" title="Agregar al carrito">
                                             <i class="fas fa-cart-plus"></i>
                                         </button>
@@ -38,13 +38,18 @@
                                 </div>
                             </div>
                             <div class="card-footer bg-white border-0">
-                                <small class="text-muted">Cilindros: <span th:text="${carro.cilindros}">0</span></small>
+                                <small class="text-muted">
+                                    Tipo: <span th:text="${funcion.tipo}">—</span>
+                                    <span th:if="${funcion.teatro != null}">
+                                        · Teatro: <span th:text="${funcion.teatro.nombre}">—</span>
+                                    </span>
+                                </small>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div th:if="${carros == null or carros.empty}" class="alert alert-info mt-3">
+                <div th:if="${funciones == null || funciones.empty}" class="alert alert-info mt-3">
                     [[#{carrito.no_mostrar}]]
                 </div>
             </div>
@@ -75,7 +80,7 @@
                                     <thead class="table-dark">
                                         <tr>
                                             <th>#</th>
-                                            <th>Vehículo</th>
+                                            <th>Función</th>
                                             <th class="text-end">Precio</th>
                                             <th class="text-center">Cant.</th>
                                             <th class="text-end">Total</th>
@@ -87,9 +92,9 @@
                                             <td th:text="${st.count}">1</td>
                                             <td>
                                                 <div class="d-flex align-items-center gap-2">
-                                                    <img th:src="@{/images/noimage.jpg}" alt="Carro" width="48" height="48" style="object-fit:cover" class="rounded"/>
+                                                    <img th:src="@{/images/noimage.jpg}" alt="Función" width="48" height="48" style="object-fit:cover" class="rounded"/>
                                                     <div>
-                                                        <div class="fw-semibold" th:text="${item.modelo}">Modelo</div>
+                                                        <div class="fw-semibold" th:text="${item.nombre}">Nombre</div>
                                                         <small class="text-muted" th:text="${item.descripcion}">Descripción</small>
                                                     </div>
                                                 </div>
@@ -100,11 +105,11 @@
                                             <td class="text-center">
                                                 <div class="btn-group">
                                                     <a class="btn btn-sm btn-success"
-                                                       th:href="@{/carrito/modificar/{idCarro}(idCarro=${item.idCarro})}">
+                                                       th:href="@{/carrito/modificar/{idFuncion}(idFuncion=${item.idFuncion})}">
                                                         <i class="fas fa-pencil-alt"></i>
                                                     </a>
                                                     <a class="btn btn-sm btn-danger"
-                                                       th:href="@{/carrito/eliminar/{idCarro}(idCarro=${item.idCarro})}">
+                                                       th:href="@{/carrito/eliminar/{idFuncion}(idFuncion=${item.idFuncion})}">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </a>
                                                 </div>
@@ -157,10 +162,12 @@
                                 <h5 class="m-0">[[#{carrito.datos}]]</h5>
                             </div>
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${item.modelo}">Modelo</h5>
+                                <h5 class="card-title" th:text="${item.nombre}">Nombre</h5>
                                 <p class="text-muted mb-1" th:text="${item.descripcion}">Descripción</p>
                                 <div class="fw-bold" th:text="${#numbers.formatInteger(item.precio,0,'POINT')}">0</div>
-                                <div class="small text-muted mt-2">Cilindros: <span th:text="${item.cilindros}">0</span></div>
+                                <div class="small text-muted mt-2">
+                                    <span>Tipo: </span><span th:text="${item.tipo}">—</span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -169,11 +176,11 @@
                         <div class="card h-100">
                             <div class="card-body">
                                 <figure class="mb-3">
-                                    <img th:src="@{/images/noimage.jpg}" width="160" height="160" alt="Carro" style="object-fit:cover" class="rounded"/>
+                                    <img th:src="@{/images/noimage.jpg}" width="160" height="160" alt="Función" style="object-fit:cover" class="rounded"/>
                                 </figure>
 
                                 <form th:action="@{/carrito/guardar}" th:object="${item}" method="post" class="row g-3">
-                                    <input type="hidden" th:field="*{idCarro}"/>
+                                    <input type="hidden" th:field="*{idFuncion}"/>
                                     <div class="col-12">
                                         <label class="form-label" for="cantidad">[[#{carrito.cantidad}]]</label>
                                         <input class="form-control" type="number" id="cantidad" name="cantidad" th:field="*{cantidad}" min="1"/>
@@ -186,7 +193,7 @@
                                 </form>
 
                                 <div class="d-grid mt-2">
-                                    <a th:href="@{/carrito/eliminar/{idCarro}(idCarro=${item.idCarro})}" class="btn btn-danger">
+                                    <a th:href="@{/carrito/eliminar/{idFuncion}(idFuncion=${item.idFuncion})}" class="btn btn-danger">
                                         <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
                                     </a>
                                 </div>

@@ -50,7 +50,7 @@
                             <li class="nav-item">
                                 <a class="nav-link" th:href="@{/usuario/listado}" th:text="#{plantilla.Usuarios}">Usuarios</a>
                             </li>
-                            
+
                             <li class="nav-item">
                                 <a class="nav-link" th:href="@{/contact}">Contacto</a>
                             </li>
@@ -67,7 +67,7 @@
                             </li>
                         </ul>
 
-                        <div id="resultsBlock"></div>
+
 
                         <!-- Usuario autenticado -->
                         <ul sec:authorize="isAuthenticated()" class="navbar-nav ms-auto">
@@ -88,12 +88,14 @@
                 </div>
             </nav>
 
+            <div id="resultsBlock"></div>
+
             <section id="main-header" class="py-4 text-white">
                 <!-- Partículas cinematográficas -->
                 <i class="fas fa-video cinema-particle" style="font-size: 2rem;"></i>
                 <i class="fas fa-film cinema-particle" style="font-size: 1.5rem;"></i>
                 <i class="fas fa-play-circle cinema-particle" style="font-size: 1.8rem;"></i>
-                
+
                 <div class="container container-tight">
                     <div class="row align-items-center">
                         <div class="col-lg-8">

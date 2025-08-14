@@ -24,16 +24,16 @@ public class Venta implements Serializable {
     @Column(name="id_venta")
     private Long idVenta;
     private Long idFactura;
-    private Long idCarro;    
+    private Long idFuncion;    
     private double precio;
        
     
     public Venta() {
     }
 
-    public Venta(Long idFactura, Long idCarro, double precio) {
+    public Venta(Long idFactura, Long idFuncion, double precio) {
         this.idFactura = idFactura;
-        this.idCarro = idCarro;
+        this.idFuncion = idFuncion;
         this.precio = precio;
     }
 }

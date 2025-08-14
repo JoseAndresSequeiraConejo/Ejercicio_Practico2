@@ -9,27 +9,45 @@
 
         <!-- Carrito de funciones (cards) -->
         <section th:fragment="carritoFunciones" class="mb-4">
+            <!-- Contenedor donde se puede inyectar el botón "Ver Carrito" vía AJAX -->
+            <div id="resultsBlock" class="mb-3"></div>
+
             <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
                 <div th:each="f : ${funciones}" class="col">
                     <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
-                        <img src="/images/noimage.jpg" class="w-100" height="200" style="object-fit:cover;" alt="Imagen función" />
+                        <img src="/images/aven.jpg"
+                             class="w-100" height="200" style="object-fit:cover;"
+                             alt="Imagen función"/>
+
                         <div class="p-3 d-flex align-items-start justify-content-between gap-3">
                             <div class="flex-grow-1">
                                 <h6 class="mb-1" th:text="${f.nombre}">Nombre de la función</h6>
                                 <p class="text-muted small mb-2" th:text="${f.descripcion}">Descripción</p>
+
                                 <div class="d-flex flex-wrap gap-2 mb-2">
-                                    <span class="badge bg-light text-secondary">ID: <span th:text="${f.idFuncion}">0</span></span>
-                                    <span class="badge bg-light text-secondary">Tipo: <span th:text="${f.tipo != null ? f.tipo : '—'}">—</span></span>
-                                    <span class="badge bg-light text-secondary">Teatro: <span th:text="${f.teatro != null ? f.teatro.nombre : 'Sin teatro'}">Sin teatro</span></span>
+                                    <span class="badge bg-light text-secondary">
+                                        ID: <span th:text="${f.idFuncion}">0</span>
+                                    </span>
+                                    <span class="badge bg-light text-secondary">
+                                        Tipo: <span th:text="${f.tipo != null ? f.tipo : '—'}">—</span>
+                                    </span>
+                                    <span class="badge bg-light text-secondary">
+                                        Teatro: <span th:text="${f.teatro != null ? f.teatro.nombre : 'Sin teatro'}">Sin teatro</span>
+                                    </span>
                                 </div>
-                                <div class="fw-semibold">Precio: $<span th:text="${f.precio}">0.00</span></div>
+
+                                <div class="fw-semibold">
+                                    Precio: $<span th:text="${f.precio}">0.00</span>
+                                </div>
                             </div>
+
+                            <!-- Form que tu JS serializa -->
                             <form>
-                                <!-- Si tu JS de carrito espera estos names, usa los mismos -->
-                                <input type="hidden" name="idProducto" th:value="${f.idFuncion}"/>
-                                <input type="hidden" name="existencia" value="1"/>
-                                <button class="btn btn-outline-primary rounded-pill px-3"
-                                        type="button"
+                                <input type="hidden" name="idFuncion" th:value="${f.idFuncion}"/>
+                                <input type="hidden" name="nombre" th:value="${f.nombre}"/>
+
+                                <button type="button"
+                                        class="btn btn-outline-primary rounded-pill px-3"
                                         onclick="addCard(this.form)"
                                         title="Agregar al carrito">
                                     <i class="fas fa-cart-plus me-1"></i> [[#{accion.agregar}]]
@@ -40,6 +58,8 @@
                 </div>
             </div>
         </section>
+
+
 
         <!-- Botón agregar -->
         <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
