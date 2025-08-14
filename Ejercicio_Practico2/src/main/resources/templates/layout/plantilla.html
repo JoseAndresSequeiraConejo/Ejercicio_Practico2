@@ -5,7 +5,7 @@
     xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
     <head th:fragment="head">
-        <title>Caso2</title>
+        <title>Cinemax</title>
         <meta charset="UTF-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
 
@@ -21,16 +21,16 @@
         <script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
         <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
         <script th:src="@{/js/rutinas.js}"></script>
-    </head>
 
+    </head>
 
     <body>
         <header th:fragment="header" class="header">
             <nav class="navbar navbar-expand-md navbar-dark sticky-top py-2">
                 <div class="container container-tight">
                     <a th:href="@{/}" class="navbar-brand d-flex align-items-center gap-2">
-                        <i class="fas fa-cubes"></i>
-                        <span>CarShop</span>
+                        <i class="fas fa-film"></i>
+                        <span>Cinemax</span>
                     </a>
 
                     <button class="navbar-toggler" type="button"
@@ -69,7 +69,6 @@
 
                         <div id="resultsBlock"></div>
 
-
                         <!-- Usuario autenticado -->
                         <ul sec:authorize="isAuthenticated()" class="navbar-nav ms-auto">
                             <li class="nav-item">
@@ -90,20 +89,25 @@
             </nav>
 
             <section id="main-header" class="py-4 text-white">
+                <!-- Partículas cinematográficas -->
+                <i class="fas fa-video cinema-particle" style="font-size: 2rem;"></i>
+                <i class="fas fa-film cinema-particle" style="font-size: 1.5rem;"></i>
+                <i class="fas fa-play-circle cinema-particle" style="font-size: 1.8rem;"></i>
+                
                 <div class="container container-tight">
                     <div class="row align-items-center">
                         <div class="col-lg-8">
                             <h1 class="h2 mb-1">
-                                <i class="fas fa-cog me-2"></i> [[#{plantilla.titulo}]]
+                                <i class="fas fa-video me-2"></i> [[#{plantilla.titulo}]]
                             </h1>
                             <p class="mb-0 text-white-50">[[#{plantilla.subtitulo(#{plantilla.titulo})}]]</p>
                         </div>
                         <div class="col-lg-4 text-lg-end pt-3 pt-lg-0">
                             <a th:href="@{/funcion/listado}" class="btn btn-ghost me-2">
-                                <i class="fas fa-car-side me-1"></i> [[#{plantilla.funciones}]]
+                                <i class="fas fa-play-circle me-1"></i> [[#{plantilla.funciones}]]
                             </a>
                             <a th:href="@{/usuario/listado}" class="btn btn-light text-dark">
-                                <i class="fas fa-file-alt me-1"></i> [[#{plantilla.usuarios}]]
+                                <i class="fas fa-users me-1"></i> [[#{plantilla.usuarios}]]
                             </a>
                         </div>
                     </div>
@@ -114,7 +118,7 @@
         <!-- Contenido de la página aquí -->
         <main class="container container-tight my-4">
             <div class="alert alert-dark border-0" role="alert" th:if="${flashMsg}">
-                <i class="fas fa-info-circle me-1"></i> [[${flashMsg}]]
+                <i class="fas fa-bullhorn me-1"></i> [[${flashMsg}]]
             </div>
             <div th:insert="~{::content}"></div>
         </main>
@@ -123,6 +127,7 @@
             <div class="container container-tight">
                 <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
                     <p class="lead m-0">
+                        <i class="fas fa-film me-2" style="color: #ff6b35;"></i>
                         &copy; [[#{plantilla.derechos}]]
                     </p>
                     <p class="m-0 lang">

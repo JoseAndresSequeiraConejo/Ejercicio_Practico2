@@ -44,11 +44,11 @@ CREATE TABLE funcion (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Manteniendo los mismos datos (precio numérico)
-INSERT INTO funcion (id_teatro, nombre, descripcion, precio) VALUES
-  (1,'Avengers Endgame','Es una pelicula',4000),
-  (1,'Avengers Endgame','Es una pelicula',4000),
-  (1,'Avengers Endgame','Es una pelicula',4000),
-  (1,'Avengers Endgame','Es una pelicula',4000);
+INSERT INTO funcion (id_teatro, nombre, descripcion, precio,tipo) VALUES
+  (1,'Avengers Endgame','Es una pelicula',4000,"GOLD"),
+  (1,'Avengers Endgame','Es una pelicula',4000,"PREMIUM"),
+  (1,'Avengers Endgame','Es una pelicula',4000,"BASICO"),
+  (1,'Avengers Endgame','Es una pelicula',4000,"GOLD");
 
 -- ================================
 -- TABLA: USUARIO

@@ -1,37 +1,41 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org" 
+      xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
     <head th:replace="~{layout/plantilla :: head}">
-        <title>Función</title>
+        <title>Funciones</title>
     </head>
     <body>
 
-        <!-- Fragmento: Listado de funciones en tarjetas -->
-        <section th:fragment="funciones" class="mb-4">
-            <div class="row row-cols-1 row-cols-md-3 g-3">
+        <!-- Carrito de funciones (cards) -->
+        <section th:fragment="carritoFunciones" class="mb-4">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-3">
                 <div th:each="f : ${funciones}" class="col">
-                    <div class="card h-100">
-                        <img src="/images/noimage.jpg" class="card-img-top" alt="Imagen función" height="200" style="object-fit:cover;">
-                            <div class="card-body">
-                                <h5 class="card-title" th:text="${f.nombre}">Nombre de la función</h5>
-                                <ul class="list-unstyled mb-3">
-                                    <li><strong>ID:</strong> <span th:text="${f.idFuncion}"></span></li>
-                                    <li><strong>Descripción:</strong> <span th:text="${f.descripcion}"></span></li>
-                                    <li><strong>Precio:</strong> $<span th:text="${f.precio}"></span></li>
-                                    <li><strong>Tipo:</strong> <span th:text="${f.tipo}"></span></li>
-                                    <li>
-                                        <strong>Teatro:</strong>
-                                        <span th:text="${f.teatro != null ? f.teatro.nombre : '—'}"></span>
-                                    </li>
-                                </ul>
-                                <form>
-                                    <input type="hidden" name="idFuncion" th:value="${f.idFuncion}"/>
-                                    <button class="btn btn-light" type="button" onclick="addCard(this.form)">
-                                        <i class="fas fa-cart-plus"></i> Agregar
-                                    </button>
-                                </form>
+                    <div class="card h-100 shadow-sm border-0 rounded-4 overflow-hidden">
+                        <img src="/images/noimage.jpg" class="w-100" height="200" style="object-fit:cover;" alt="Imagen función" />
+                        <div class="p-3 d-flex align-items-start justify-content-between gap-3">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1" th:text="${f.nombre}">Nombre de la función</h6>
+                                <p class="text-muted small mb-2" th:text="${f.descripcion}">Descripción</p>
+                                <div class="d-flex flex-wrap gap-2 mb-2">
+                                    <span class="badge bg-light text-secondary">ID: <span th:text="${f.idFuncion}">0</span></span>
+                                    <span class="badge bg-light text-secondary">Tipo: <span th:text="${f.tipo != null ? f.tipo : '—'}">—</span></span>
+                                    <span class="badge bg-light text-secondary">Teatro: <span th:text="${f.teatro != null ? f.teatro.nombre : 'Sin teatro'}">Sin teatro</span></span>
+                                </div>
+                                <div class="fw-semibold">Precio: $<span th:text="${f.precio}">0.00</span></div>
                             </div>
+                            <form>
+                                <!-- Si tu JS de carrito espera estos names, usa los mismos -->
+                                <input type="hidden" name="idProducto" th:value="${f.idFuncion}"/>
+                                <input type="hidden" name="existencia" value="1"/>
+                                <button class="btn btn-outline-primary rounded-pill px-3"
+                                        type="button"
+                                        onclick="addCard(this.form)"
+                                        title="Agregar al carrito">
+                                    <i class="fas fa-cart-plus me-1"></i> [[#{accion.agregar}]]
+                                </button>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -41,12 +45,8 @@
         <section th:fragment="botonesAgregar" class="py-4 mb-4 bg-light">
             <div class="container">
                 <div class="row">
-                    <div class="col-md-3" sec:authorize="hasRole('ADMIN')">   
-                        <button 
-                            type="button" 
-                            class="btn btn-primary w-100" 
-                            data-bs-toggle="modal" 
-                            data-bs-target="#agregarFuncion">
+                    <div class="col-md-3" sec:authorize="hasRole('ADMIN')">
+                        <button type="button" class="btn btn-primary w-100" data-bs-toggle="modal" data-bs-target="#agregarFuncion">
                             <i class="fas fa-plus"></i> [[#{accion.agregar}]]
                         </button>
                     </div>
@@ -60,57 +60,40 @@
                 <div class="modal-dialog modal-lg">
                     <div class="modal-content">
                         <div class="modal-header bg-info text-white">
-                            <h5 class="modal-title" th:text="#{accion.agregar}">Agregar Función</h5>
+                            <h5 class="modal-title" id="agregarFuncionLbl" th:text="#{accion.agregar}">Agregar Función</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div> 
-
+                        </div>
                         <form th:action="@{/funcion/guardar}" th:object="${funcion}" method="POST" class="was-validated">
-                            <input type="hidden" th:field="*{idFuncion}"/>
-
+                            <input type="hidden" th:field="*{idFuncion}" />
                             <div class="modal-body">
-                                <!-- Teatro -->
-                                <div class="form-group mb-3">
-                                    <label for="teatro">Teatro</label>
-                                    <select class="form-select" th:field="*{teatro.idTeatro}" required>
+                                <div class="mb-3">
+                                    <label for="teatroSel">Teatro</label>
+                                    <select id="teatroSel" class="form-select" th:field="*{teatro.idTeatro}" required>
                                         <option value="" disabled selected>-- Seleccione --</option>
-                                        <option th:each="t : ${teatros}" 
-                                                th:value="${t.idTeatro}" 
-                                                th:text="${t.nombre + ' - ' + (t.ubicacion != null ? t.ubicacion : '')}">
-                                        </option>
+                                        <option th:each="t : ${teatros}" th:value="${t.idTeatro}" th:text="${t.nombre + ' - ' + (t.ubicacion != null ? t.ubicacion : '')}"></option>
                                     </select>
                                 </div>
-
-                                <!-- Nombre -->
-                                <div class="form-group mb-3">
+                                <div class="mb-3">
                                     <label for="nombre" th:text="#{funcion.nombre}">Nombre</label>
-                                    <input type="text" class="form-control" th:field="*{nombre}" required/>
+                                    <input id="nombre" type="text" class="form-control" th:field="*{nombre}" required />
                                 </div>
-
-                                <!-- Descripción -->
-                                <div class="form-group mb-3">
+                                <div class="mb-3">
                                     <label for="descripcion" th:text="#{funcion.descripcion}">Descripción</label>
-                                    <input type="text" class="form-control" th:field="*{descripcion}" required/>
+                                    <input id="descripcion" type="text" class="form-control" th:field="*{descripcion}" required />
                                 </div>
-
-                                <!-- Precio -->
-                                <div class="form-group mb-3">
+                                <div class="mb-3">
                                     <label for="precio" th:text="#{funcion.precio}">Precio</label>
-                                    <input type="number" step="0.01" min="0" class="form-control" th:field="*{precio}" required/>
+                                    <input id="precio" type="number" step="0.01" min="0" class="form-control" th:field="*{precio}" required />
                                 </div>
-
-                                <!-- Tipo -->
-                                <div class="form-group mb-3">
+                                <div class="mb-3">
                                     <label for="tipo" th:text="#{funcion.tipo}">Tipo</label>
-                                    <input type="text" class="form-control" th:field="*{tipo}" placeholder="BASICO, PREMIUM o GOLD"/>
+                                    <input id="tipo" type="text" class="form-control" th:field="*{tipo}" placeholder="BASICO, PREMIUM o GOLD" />
                                 </div>
-
-                                <!-- Activo -->
                                 <div class="form-check mb-3">
-                                    <input class="form-check-input" type="checkbox" th:field="*{activo}" id="activo"/>
+                                    <input id="activo" class="form-check-input" type="checkbox" th:field="*{activo}" />
                                     <label class="form-check-label" for="activo" th:text="#{funcion.activo}">Activo</label>
                                 </div>
                             </div>
-
                             <div class="modal-footer">
                                 <button class="btn btn-primary" type="submit" th:text="#{accion.guardar}">Guardar</button>
                             </div>
@@ -120,7 +103,7 @@
             </div>
         </section>
 
-        <!-- Listado de funciones -->
+        <!-- Listado de funciones (tabla) -->
         <section th:fragment="listadoFunciones" id="funciones">
             <div class="container" sec:authorize="hasRole('ADMIN')">
                 <div class="row">
@@ -150,14 +133,12 @@
                                             <td>[[${funcion.precio}]]</td>
                                             <td>[[${funcion.tipo}]]</td>
                                             <td>
-                                                <a sec:authorize="hasRole('ADMIN')" th:href="@{/funcion/eliminar/}+${funcion.idFuncion}"
-                                                   class="btn btn-danger">
+                                                <a sec:authorize="hasRole('ADMIN')" th:href="@{/funcion/eliminar/}+${funcion.idFuncion}" class="btn btn-danger">
                                                     <i class="fas fa-trash-can"></i> [[#{accion.eliminar}]]
                                                 </a>
                                             </td>
                                             <td>
-                                                <a sec:authorize="hasRole('ADMIN')" th:href="@{/funcion/modificar/}+${funcion.idFuncion}"
-                                                   class="btn btn-success">
+                                                <a sec:authorize="hasRole('ADMIN')" th:href="@{/funcion/modificar/}+${funcion.idFuncion}" class="btn btn-success">
                                                     <i class="fas fa-pencil"></i> [[#{accion.actualizar}]]
                                                 </a>
                                             </td>
@@ -170,13 +151,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-3">                        
+                    <div class="col-md-3">
                         <div class="card text-center bg-success text-white mb-3">
                             <div class="card-body">
                                 <h3 th:text="#{funcion.totalFunciones}">Total Funciones</h3>
-                                <h4 class="fs-2">
-                                    <i class="fas fa-users"></i> [[${totalFunciones}]]
-                                </h4>
+                                <h4 class="fs-2"><i class="fas fa-users"></i> [[${totalFunciones}]]</h4>
                             </div>
                         </div>
                     </div>
@@ -184,37 +163,42 @@
             </div>
         </section>
 
-        <!-- Formulario editar función -->
-        <section th:fragment="editarFuncion">            
-            <form method="POST"
-                  th:action="@{/funcion/guardar}"
-                  th:object="${funcion}"
-                  class="was-validated">
-                <input type="hidden" name="idFuncion" th:field="*{idFuncion}"/> 
-                <section th:replace="~{funcion/fragmentos :: botonesEditar}"/> 
-                <div id="details"> 
-                    <div class="container">
-                        <div class="row">
-                            <div class="col">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4>[[#{accion.actualizar}]]</h4>
-                                    </div>
-                                    <div class="card-body">                                        
-                                        <div class="form-group">
-                                            <label for="nombre" th:text="#{funcion.nombre}">Nombre: </label>
-                                            <input type="text" class="form-control" th:field="*{nombre}"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="descripcion" th:text="#{funcion.descripcion}">Descripción: </label>
-                                            <input type="text"  class="form-control" th:field="*{descripcion}"/>
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="precio" th:text="#{funcion.precio}">Precio: </label>
-                                            <input type="number" step="0.01" class="form-control" th:field="*{precio}"/>
-                                        </div>                                        
-                                    </div>
-                                </div>
+        <!-- Form editar función -->
+        <section th:fragment="editarFuncion">
+            <form method="POST" th:action="@{/funcion/guardar}" th:object="${funcion}" class="was-validated">
+                <input type="hidden" th:field="*{idFuncion}" />
+                <section th:replace="~{::botonesEditar}"></section>
+                <div id="details" class="mt-3">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>[[#{accion.actualizar}]]</h4>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label for="nombreEdit" th:text="#{funcion.nombre}">Nombre</label>
+                                <input id="nombreEdit" type="text" class="form-control" th:field="*{nombre}" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="descripcionEdit" th:text="#{funcion.descripcion}">Descripción</label>
+                                <input id="descripcionEdit" type="text" class="form-control" th:field="*{descripcion}" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="precioEdit" th:text="#{funcion.precio}">Precio</label>
+                                <input id="precioEdit" type="number" step="0.01" min="0" class="form-control" th:field="*{precio}" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="tipoEdit" th:text="#{funcion.tipo}">Tipo</label>
+                                <input id="tipoEdit" type="text" class="form-control" th:field="*{tipo}" />
+                            </div>
+                            <div class="mb-3">
+                                <label for="teatroEdit" th:text="#{funcion.teatro}">Teatro</label>
+                                <select id="teatroEdit" class="form-select" th:field="*{teatro.idTeatro}">
+                                    <option th:each="t : ${teatros}" th:value="${t.idTeatro}" th:text="${t.nombre + ' - ' + (t.ubicacion != null ? t.ubicacion : '')}"></option>
+                                </select>
+                            </div>
+                            <div class="form-check">
+                                <input id="activoEdit" class="form-check-input" type="checkbox" th:field="*{activo}" />
+                                <label class="form-check-label" for="activoEdit" th:text="#{funcion.activo}">Activo</label>
                             </div>
                         </div>
                     </div>
@@ -224,28 +208,26 @@
 
         <!-- Botones editar -->
         <section th:fragment="botonesEditar">
-            <div id="actions" class="py-4 mb-4 bg-light">
-                <div class="container">
-                    <div class="row">
-                        <div class="d-grid col-md-2 mx-auto">
-                            <a th:href="@{/funcion/listado}" class="btn btn-light w-100">
-                                <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
-                            </a>
-                        </div>
-                        <div class="d-grid col-md-2 mx-auto">
-                            <button type="submit" class="btn btn-success w-100">
-                                <i class="fas fa-check"></i> [[#{accion.guardar}]]
-                            </button>
-                        </div>
-                        <div class="d-grid col-md-2 mx-auto">
-                            <a th:href="@{/funcion/eliminar/}+${funcion.idFuncion}"
-                               class="btn btn-danger w-100">
-                                <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
-                            </a>
-                        </div>
+            <div class="container py-4 mb-4 bg-light">
+                <div class="row">
+                    <div class="col-md-4 d-grid">
+                        <a th:href="@{/funcion/listado}" class="btn btn-light">
+                            <i class="fas fa-arrow-left"></i> [[#{accion.regresar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 d-grid">
+                        <a th:href="@{/funcion/eliminar/}+${funcion.idFuncion}" class="btn btn-danger">
+                            <i class="fas fa-trash"></i> [[#{accion.eliminar}]]
+                        </a>
+                    </div>
+                    <div class="col-md-4 d-grid">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-check"></i> [[#{accion.guardar}]]
+                        </button>
                     </div>
                 </div>
             </div>
         </section>
+
     </body>
 </html>
